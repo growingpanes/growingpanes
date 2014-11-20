@@ -64,10 +64,7 @@ func main() {
 	logger = log.New(os.Stdout, "PanesD ", log.Lshortfile)
 
 	// get available tabs and websocket urls from Chrome
-	tabsJson := getTabs()
-	var tabs []Tab
-	err := json.Unmarshal(tabsJson.Bytes(), &tabs)
-	errCheck(err)
+	tabs := getTabs()
 
 	// Set up websockets connection to Chrome tab
 	netConn, err := net.Dial("tcp", host+":"+strconv.Itoa(port))
@@ -128,18 +125,6 @@ func main() {
 			fmt.Fprintln(os.Stderr, "reading standard input:", err)
 		}
 
-		// params := map[string]string{
-		// 	"url": input,
-		// }
-		// request, err := jsonrpc.EncodeClientRequest("Page.navigate", params)
-		// logger.Println("Sending request: " + bytes.NewBuffer(request).String())
-		// errCheck(err)
-		// err = chrome.WriteMessage(
-		// 	websocket.TextMessage,
-		// 	request,
-		// )
-		// errCheck(err)
-
 		params := map[string]interface{}{
 			"url": input,
 		}
@@ -150,17 +135,13 @@ func main() {
 			Id:     int(rand.Int31()),
 		}
 
-		// logger.Println("Sending request: " + bytes.NewBuffer(json).String())
 		err = chrome.WriteJSON(urlChangeMsg)
-		// m := "{\"method\":\"Page.navigate\",\"params\":{\"url\":\"http://aol.com\"},\"id\":6129484611666145821}"
-		// m  = "{\"jsonrpc\":\"2.0\",\"id\":0,\"method\":\"Page.navigate\",\"params\":{\"url\":\"http://aol.com\"}}"
-		// err = chrome.WriteMessage(websocket.TextMessage, bytes.NewBufferString(m).Bytes())
-		// errCheck(err)
+		errCheck(err)
 	}
 
 }
 
-func getTabs() *bytes.Buffer {
+func getTabs() []Tab {
 	url := "http://" + host + ":" + strconv.Itoa(port) + "/json"
 	logger.Println("dialing " + url)
 
@@ -169,7 +150,11 @@ func getTabs() *bytes.Buffer {
 		log.Fatalf("could not fetch: %v", err)
 	}
 
-	return &response
+	var tabs []Tab
+	err := json.Unmarshal(response.Bytes(), &tabs)
+	errCheck(err)
+
+	return tabs
 }
 
 func errCheck(err error) {
