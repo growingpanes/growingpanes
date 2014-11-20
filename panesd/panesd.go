@@ -5,8 +5,8 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	// "github.com/go-martini/martini"
 	"github.com/gorilla/http"
-	// jsonrpc "github.com/gorilla/rpc/json"
 	"github.com/gorilla/websocket"
 	"log"
 	"math/rand"
@@ -63,20 +63,7 @@ func main() {
 	// Set up logging
 	logger = log.New(os.Stdout, "PanesD ", log.Lshortfile)
 
-	// get available tabs and websocket urls from Chrome
-	tabs := getTabs()
-
-	// Set up websockets connection to Chrome tab
-	netConn, err := net.Dial("tcp", host+":"+strconv.Itoa(port))
-	// netConn, err := net.Dial("tcp", "echo.websocket.org:80")
-	errCheck(err)
-	wsUrl := tabs[0].WebSocketDebuggerUrl
-	// wsUrl = "ws://echo.websocket.org/?encoding=text"
-	logger.Println("Connecting to " + wsUrl)
-	url, err := url.Parse(wsUrl)
-	errCheck(err)
-	chrome, _, err := websocket.NewClient(netConn, url, nil, 2048, 2048)
-	errCheck(err)
+	chrome, err := getChrome()
 
 	// turn console on
 	// request, err := jsonrpc.EncodeClientRequest("Console.enable", nil)
@@ -125,20 +112,41 @@ func main() {
 			fmt.Fprintln(os.Stderr, "reading standard input:", err)
 		}
 
-		params := map[string]interface{}{
-			"url": input,
-		}
-
-		urlChangeMsg := ChromeMessage{
-			Method: "Page.navigate",
-			Params: params,
-			Id:     int(rand.Int31()),
-		}
-
-		err = chrome.WriteJSON(urlChangeMsg)
+		err = navigate(chrome, input)
 		errCheck(err)
 	}
 
+}
+
+func getChrome() (*websocket.Conn, error) {
+	// get available tabs and websocket urls from Chrome
+	tabs := getTabs()
+
+	// Set up websockets connection to Chrome tab
+	netConn, err := net.Dial("tcp", host+":"+strconv.Itoa(port))
+	// netConn, err := net.Dial("tcp", "echo.websocket.org:80")
+	errCheck(err)
+	wsUrl := tabs[0].WebSocketDebuggerUrl
+	// wsUrl = "ws://echo.websocket.org/?encoding=text"
+	logger.Println("Connecting to " + wsUrl)
+	url, err := url.Parse(wsUrl)
+	errCheck(err)
+	chrome, _, err := websocket.NewClient(netConn, url, nil, 2048, 2048)
+	return chrome, err
+}
+
+func navigate(chrome *websocket.Conn, url string) error {
+	params := map[string]interface{}{
+		"url": url,
+	}
+
+	urlChangeMsg := ChromeMessage{
+		Method: "Page.navigate",
+		Params: params,
+		Id:     int(rand.Int31()),
+	}
+
+	return chrome.WriteJSON(urlChangeMsg)
 }
 
 func getTabs() []Tab {
