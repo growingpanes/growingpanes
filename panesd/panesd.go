@@ -5,12 +5,13 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	// "github.com/go-martini/martini"
-	"github.com/gorilla/http"
+	ghttp "github.com/gorilla/http"
+	"github.com/gorilla/mux"
 	"github.com/gorilla/websocket"
 	"log"
 	"math/rand"
 	"net"
+	"net/http"
 	"net/url"
 	"os"
 	"runtime"
@@ -103,6 +104,16 @@ func main() {
 		}
 	}()
 
+	r := mux.NewRouter()
+	r.HandleFunc("/navigate/{url:.+}", func(response http.ResponseWriter, request *http.Request) {
+		vars := mux.Vars(request)
+		url := vars["url"]
+		errCheck(navigate(chrome, url))
+		fmt.Fprint(response, "Navigated to "+url)
+	})
+	http.Handle("/", r)
+	log.Fatal(http.ListenAndServe(":3000", nil))
+
 	scanner := bufio.NewScanner(os.Stdin)
 	for scanner.Scan() {
 		fmt.Print("Enter Url: ")
@@ -154,7 +165,7 @@ func getTabs() []Tab {
 	logger.Println("dialing " + url)
 
 	var response bytes.Buffer
-	if _, err := http.Get(&response, url); err != nil {
+	if _, err := ghttp.Get(&response, url); err != nil {
 		log.Fatalf("could not fetch: %v", err)
 	}
 
