@@ -27,7 +27,9 @@
 #
 Padrino.configure_apps do
   # enable :sessions
-  set :session_secret, 'd61422673611872b3f58568f5b8c2d4edb6c0bbfe5595f52804bec68da775987'
+  require_relative 'session_secret'
+  raise "No session secret found." unless session_secret
+  set :session_secret, session_secret
   set :protection, :except => :path_traversal
   set :protect_from_csrf, true
 end
