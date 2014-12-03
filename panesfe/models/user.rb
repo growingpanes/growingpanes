@@ -3,6 +3,8 @@ class User
   include DataMapper::Validate
   attr_accessor :password, :password_confirmation
 
+  ROLES = %W{admin user}
+
   # Properties
   property :id,               Serial
   property :name,             String
@@ -21,7 +23,7 @@ class User
   validates_length_of        :email,    :min => 3, :max => 100
   validates_uniqueness_of    :email,    :case_sensitive => false
   validates_format_of        :email,    :with => :email_address
-  validates_format_of        :role,     :with => /[A-Za-z]/
+  validates_within           :role,     :set => ROLES
 
   # Callbacks
   before :save, :encrypt_password
@@ -43,6 +45,10 @@ class User
 
   def has_password?(password)
     ::BCrypt::Password.new(crypted_password) == password
+  end
+
+  def display_name
+    [name, surname].join(' ')
   end
 
   private

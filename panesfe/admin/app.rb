@@ -32,6 +32,7 @@ module Panesfe
     end
 
     access_control.roles_for :admin do |role|
+      role.project_module :presentations, '/presentations'
       role.project_module :users, '/users'
     end
 
