@@ -1,9 +1,9 @@
-#!/usr/bin/env rackup
-# encoding: utf-8
+#\ -w -p 3000
+require_relative 'config/boot'
 
-# This file can be used to start Padrino,
-# just execute it from the command line.
-
-require File.expand_path("../config/boot.rb", __FILE__)
-
-run Padrino.application
+maps = {
+  '/'                  => RootController,
+}
+maps.each do |path, controller|
+  map(path){ run controller}
+end

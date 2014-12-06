@@ -12,6 +12,8 @@ class User
   property :email,            String
   property :crypted_password, String, :length => 70
   property :role,             String
+  property :provider,         String
+  property :uid,              String
   has n, :presentations
 
   # Validations
@@ -51,10 +53,21 @@ class User
     [name, surname].join(' ')
   end
 
+  def self.create_with_omniauth(auth)
+    create!(
+      provider: auth["provider"],
+      uid:      auth["uid"],
+      name:     auth["info"]["given_name"] || auth["info"]["first_name"],
+      surname:  auth["info"]["family_name"] || auth["info"]["last_name"],
+      email:    auth["info"]["email"],
+      role:     "user"
+    )
+  end
+
   private
 
   def password_required
-    crypted_password.blank? || password.present?
+    provider != 'google_oauth2' && (crypted_password.blank? || password.present?)
   end
 
   def encrypt_password
