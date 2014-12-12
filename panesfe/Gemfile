@@ -9,6 +9,8 @@ gem 'dotenv', :groups => [:development, :test]
 gem 'rake'
 
 gem 'erubis', '~> 2.7.0'
+gem 'i18n'
+
 gem 'dm-sqlite-adapter'
 gem 'dm-validations'
 gem 'dm-timestamps'

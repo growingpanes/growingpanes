@@ -1,9 +1,6 @@
-#\ -w -p 3000
-require_relative 'config/boot'
+#\ -p 3000
+$: << File.dirname(__FILE__)
 
-maps = {
-  '/'                  => RootController,
-}
-maps.each do |path, controller|
-  map(path){ run controller}
-end
+require 'app'
+
+run Panesfe::App

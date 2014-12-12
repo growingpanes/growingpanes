@@ -53,7 +53,8 @@ class User
     [name, surname].join(' ')
   end
 
-  def self.create_with_omniauth(auth)
+  def self.find_or_create_with_omniauth(auth)
+    first(uid: auth["uid"], provider: auth["provider"]) ||
     create!(
       provider: auth["provider"],
       uid:      auth["uid"],

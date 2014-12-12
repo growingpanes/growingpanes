@@ -126,6 +126,7 @@ DEPENDENCIES
   dm-validations
   dotenv
   erubis (~> 2.7.0)
+  i18n
   omniauth
   omniauth-google-oauth2
   pry
