@@ -5,10 +5,10 @@
 <table class="table table-striped">
   <thead>
     <tr>
-      <th><%= model_class.human_attribute_name(:id) %></th>
+      <!-- <th><%= model_class.human_attribute_name(:id) %></th> -->
       <th><%= model_class.human_attribute_name(:name) %></th>
       <th><%= model_class.human_attribute_name(:published) %></th>
-      <th><%= model_class.human_attribute_name(:user_id) %></th>
+      <!-- <th><%= model_class.human_attribute_name(:user_id) %></th> -->
       <th><%= model_class.human_attribute_name(:created_at) %></th>
       <th><%=t '.actions', :default => t("helpers.actions") %></th>
     </tr>
@@ -16,10 +16,10 @@
   <tbody>
     <% @presentations.each do |presentation| %>
       <tr>
-        <td><%= link_to presentation.id, presentation_path(presentation) %></td>
-        <td><%= presentation.name %></td>
+        <!-- <td><%= link_to presentation.id, presentation_path(presentation) %></td> -->
+        <td><%= link_to presentation.name, presentation_path(presentation) %></td>
         <td><%= presentation.published %></td>
-        <td><%= presentation.user_id %></td>
+        <!-- <td><%= presentation.user_id %></td> -->
         <td><%=l presentation.created_at %></td>
         <td>
           <%= link_to t('.edit', :default => t("helpers.links.edit")),

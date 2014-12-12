@@ -3,7 +3,8 @@ Rails.application.routes.draw do
   resources :presentations
 
   get '/auth/:provider/callback', to: 'auth#callback'
-  get '/auth', to: 'auth#index'
+  get '/auth', to: 'auth#index', as: 'login'
+  get '/auth/logout', to: 'auth#index', as: 'logout'
   get '/presentations', to: 'presentations#list', as: 'logged_in_home'
 
   # The priority is based upon order of creation: first created -> highest priority.

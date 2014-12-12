@@ -25,6 +25,7 @@ class PresentationsController < ApplicationController
   # POST /presentations.json
   def create
     @presentation = Presentation.new(presentation_params)
+    @presentation.user = current_user
 
     respond_to do |format|
       if @presentation.save

@@ -2,7 +2,7 @@ module CurrentUserHelper
   def current_user
     return @current_user if @current_user
     return nil unless session[:auth_email]
-    @current_user = User.first(email: session[:auth_email])
+    @current_user = User.find_by(email: session[:auth_email])
     return @current_user
   end
 
