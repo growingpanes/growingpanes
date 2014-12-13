@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
   resources :users
-  resources :presentations
+  resources :presentations do
+    get 'display', on: :member
+    get 'push', on: :member
+  end
 
   get '/auth/:provider/callback', to: 'auth#callback'
   get '/auth', to: 'auth#index', as: 'login'

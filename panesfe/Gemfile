@@ -46,3 +46,6 @@ gem 'dotenv-rails', :groups => [:development, :test]
 
 gem 'better_errors', :groups => [:development]
 gem 'binding_of_caller', :groups => [:development]
+
+gem 'delayed_job_active_record'
+gem 'rest-client'

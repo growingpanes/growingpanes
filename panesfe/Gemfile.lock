@@ -45,6 +45,11 @@ GEM
     coffee-script-source (1.8.0)
     commonjs (0.2.7)
     debug_inspector (0.0.2)
+    delayed_job (4.0.3)
+      activesupport (>= 3.0, < 4.2)
+    delayed_job_active_record (4.0.2)
+      activerecord (>= 3.0, < 4.2)
+      delayed_job (>= 3.0, < 4.1)
     dotenv (1.0.2)
     dotenv-rails (1.0.2)
       dotenv (= 1.0.2)
@@ -76,6 +81,7 @@ GEM
     multi_json (1.10.1)
     multi_xml (0.5.5)
     multipart-post (2.0.0)
+    netrc (0.10.0)
     oauth2 (1.0.0)
       faraday (>= 0.8, < 0.10)
       jwt (~> 1.0)
@@ -115,6 +121,9 @@ GEM
     rdoc (4.2.0)
       json (~> 1.4)
     ref (1.0.5)
+    rest-client (1.7.2)
+      mime-types (>= 1.16, < 3.0)
+      netrc (~> 0.7)
     sdoc (0.4.1)
       json (~> 1.7, >= 1.7.7)
       rdoc (~> 4.0)
@@ -154,6 +163,7 @@ PLATFORMS
 DEPENDENCIES
   better_errors
   binding_of_caller
+  delayed_job_active_record
   dotenv-rails
   jbuilder (~> 2.0)
   jquery-rails
@@ -161,6 +171,7 @@ DEPENDENCIES
   omniauth
   omniauth-google-oauth2
   rails (~> 4.1)
+  rest-client
   sdoc (~> 0.4.0)
   spring
   sqlite3

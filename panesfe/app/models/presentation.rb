@@ -4,6 +4,6 @@ class Presentation < ActiveRecord::Base
   validates :name, uniqueness: {scope: :user}
 
   def content
-    "<html><body><h1>Hello Video Wall</h1></body></html>"
+    "<html><body><h1>Hello Video Wall, this is #{name.inspect}, which belongs to #{user.email}</h1></body></html>"
   end
 end

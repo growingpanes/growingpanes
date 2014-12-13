@@ -1,5 +1,5 @@
 class PresentationsController < ApplicationController
-  before_action :set_presentation, only: [:show, :edit, :update, :destroy]
+  before_action :set_presentation, only: [:show, :display, :push, :edit, :update, :destroy]
 
   # GET /presentations
   # GET /presentations.json
@@ -10,6 +10,22 @@ class PresentationsController < ApplicationController
   # GET /presentations/1
   # GET /presentations/1.json
   def show
+  end
+
+  def push
+    push_url = display_presentation_url(@presentation).sub('//', '/')
+    logger.debug "Sending #{push_url.inspect}"
+    RestClient.get(
+      'http://localhost:3001/navigate/' + 
+      push_url
+    )
+    redirect_to action: :index
+  end
+
+  # TODO: secure this
+  # GET /presentations/1/display
+  def display
+    render html: @presentation.content.html_safe
   end
 
   # GET /presentations/new
