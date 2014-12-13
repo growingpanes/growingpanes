@@ -112,7 +112,7 @@ func main() {
 		fmt.Fprint(response, "Navigated to "+url)
 	})
 	http.Handle("/", r)
-	log.Fatal(http.ListenAndServe(":3000", nil))
+	log.Fatal(http.ListenAndServe(":3001", nil))
 
 	scanner := bufio.NewScanner(os.Stdin)
 	for scanner.Scan() {
