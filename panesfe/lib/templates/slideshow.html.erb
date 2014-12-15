@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/stylesheets/superslides.css">
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script src="/jquery.animate-enhanced.min.js"></script>
+  <script src="/jquery.superslides.min.js"></script>
+</head>
+<body>
+
+  <div id="slides">
+    <div class="slides-container">
+      <img src="http://placehold.it/3840x2160/ffffff/000000&text=4K+<%= name.gsub(' ', '+') %>+slide" alt="">
+      <img src="http://placehold.it/3840x2160/000000/ffffff&text=by+<%= user.email.gsub(' ', '+')%>" alt="">
+    </div>
+  </div>
+
+  <script>
+    $('#slides').superslides({play: 2500, pagination: false})
+  </script>
+
+</body>
+</html>
