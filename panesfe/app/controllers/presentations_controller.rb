@@ -31,10 +31,12 @@ class PresentationsController < ApplicationController
   # GET /presentations/new
   def new
     @presentation = Presentation.new
+    @presentation.slides.build
   end
 
   # GET /presentations/1/edit
   def edit
+    @presentation.slides.build
   end
 
   # POST /presentations
@@ -45,7 +47,7 @@ class PresentationsController < ApplicationController
 
     respond_to do |format|
       if @presentation.save
-        format.html { redirect_to @presentation, notice: 'Presentation was successfully created.' }
+        format.html { redirect_to edit_presentation_path(@presentation), notice: t('controllers.presentations.created_flash') }
         format.json { render :show, status: :created, location: @presentation }
       else
         format.html { render :new }
@@ -86,6 +88,6 @@ class PresentationsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def presentation_params
-      params.require(:presentation).permit(:name, :published, :user_id)
+      params.require(:presentation).permit(:name, :published, slides_attributes: [:id, :image, :_destroy])
     end
 end

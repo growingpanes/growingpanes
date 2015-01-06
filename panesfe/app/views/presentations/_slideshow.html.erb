@@ -13,13 +13,35 @@
 
   <div id="slides">
     <div class="slides-container">
-      <img src="http://placehold.it/3840x2160/ffffff/000000&text=4K+<%= name.gsub(' ', '+') %>+slide" alt="">
-      <img src="http://placehold.it/3840x2160/000000/ffffff&text=by+<%= user.email.gsub(' ', '+')%>" alt="">
+      <% slideshow.slides.each do |slide| %>
+        <% if slide.is_image? %>
+          <%= image_tag slide.image.url, alt: ''%>
+        <% elsif slide.is_video? %>
+          <video src="<%=slide.image_url%>" autoplay controls></video>
+        <% else %>
+          <% raise "slide format not supported!" %>
+        <% end %>
+      <% end %>
     </div>
   </div>
 
   <script>
-    $('#slides').superslides({play: 2500, pagination: false})
+    $('#slides').superslides({play: 7500, pagination: false})
+    var container = $('.slides-container');
+    var playVideo = function (e, transition){
+      var slide = container.children(':eq(' + transition.upcoming_slide + ')')[0];
+      if (slide.tagName.toLowerCase() == 'video') {
+        slide.play();
+      }
+    }
+    var playVideoFirst = function (e){ 
+      playVideo(e, {upcoming_slide: 0});
+    }
+
+    $('#slides').on('animating.slides', playVideo)
+    $('#slides').on('init.slides', playVideoFirst)
+
+
   </script>
 
 </body>

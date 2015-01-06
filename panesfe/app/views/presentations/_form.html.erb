@@ -21,7 +21,7 @@
     <%= error_span(@presentation[:name]) %>
   </div>
 
-  <div class="form-group">
+<!--   <div class="form-group">
     <div class="checkbox">
       <%= label_tag do %>
         <%= f.check_box :published %>
@@ -31,8 +31,11 @@
     </div>
   </div>
 
+ -->
   <%= f.submit nil, :class => 'btn btn-primary' %>
   <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
             presentations_path, :class => 'btn btn-default' %>
 
 <% end %>
+
+<%= if @presentation.id then render(partial: 'images_form') end%>

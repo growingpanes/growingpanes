@@ -48,3 +48,4 @@ en:
         displayed together. Create a presentation, and then add content to it. Edit an
         existing presentation to add, remove, or re-organize content.
       no_presentations: No presentations yet. <a href="%s">Create one?</a>
+      created_flash: Presentation was successfully created. Now add some content.

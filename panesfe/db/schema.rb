@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141213001821) do
+ActiveRecord::Schema.define(version: 20141217004537) do
 
   create_table "delayed_jobs", force: true do |t|
     t.integer  "priority",   default: 0, null: false
@@ -38,6 +38,15 @@ ActiveRecord::Schema.define(version: 20141213001821) do
   end
 
   add_index "presentations", ["user_id"], name: "index_presentations_on_user_id"
+
+  create_table "slides", force: true do |t|
+    t.integer  "presentation_id", null: false
+    t.string   "image"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "slides", ["presentation_id"], name: "index_slides_on_presentation_id"
 
   create_table "users", force: true do |t|
     t.string   "email"

@@ -3,18 +3,19 @@ Rails.application.routes.draw do
   resources :presentations do
     get 'display', on: :member
     get 'push', on: :member
+    resources :slides, shallow: true
   end
 
   get '/auth/:provider/callback', to: 'auth#callback'
   get '/auth', to: 'auth#index', as: 'login'
   get '/auth/logout', to: 'auth#index', as: 'logout'
-  get '/presentations', to: 'presentations#list', as: 'logged_in_home'
+  get '/presentations', to: 'presentations#index', as: 'logged_in_home'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-  root 'presentations#list'
+  root 'presentations#index'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
