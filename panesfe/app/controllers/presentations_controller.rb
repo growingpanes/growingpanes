@@ -23,6 +23,7 @@ class PresentationsController < ApplicationController
   end
 
   # TODO: secure this
+  skip_before_filter :require_user, only: :display
   # GET /presentations/1/display
   def display
     render html: @presentation.content.html_safe

@@ -25,7 +25,7 @@ class ImageUploader < CarrierWave::Uploader::Base
   # end
 
   # Process files as they are uploaded:
-  process :resize_to_fit => [3840, 2160]
+  process :resize_to_fit => [3840, 2160], :if => :is_image?
   #
   # def scale(width, height)
   #   # do something
@@ -41,11 +41,11 @@ class ImageUploader < CarrierWave::Uploader::Base
   end
 
   def is_image? slide
-    slide.is_image?
+    !is_video?(slide)
   end
 
   def is_video? slide
-    slide.is_video?
+    slide.content_type =~ /video/i
   end
 
   # Add a white list of extensions which are allowed to be uploaded.

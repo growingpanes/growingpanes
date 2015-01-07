@@ -17,7 +17,7 @@
         <% if slide.is_image? %>
           <%= image_tag slide.image.url, alt: ''%>
         <% elsif slide.is_video? %>
-          <video src="<%=slide.image_url%>" autoplay controls></video>
+          <video src="<%=slide.image_url%>" autoplay></video>
         <% else %>
           <% raise "slide format not supported!" %>
         <% end %>
