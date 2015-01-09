@@ -1,0 +1,10 @@
+Ansible playbooks for Growing Panes
+===================================
+
+This sets up a bare Ubuntu 14.04 install to be a Growing Panes video wall
+controller. Should work with a server install but using a desktop install
+is probably best. Developed with Ansible 1.8.2.
+
+* Install requirements with `ansible-galaxy install -r requirements`
+* edit `dev` or create new inventory file as appropriate
+* configure system with `ansible-playbook site.yml -i dev`
