@@ -1,0 +1,8 @@
+- src: https://github.com/ANXS/postgresql
+  name: ANXS.postgresql
+- src: https://github.com/ANXS/monit
+  name: ANXS.monit
+- src: https://github.com/ANXS/nginx
+  name: ANXS.nginx
+- src: https://github.com/zzet/ansible-rbenv-role
+  name: zzet.rbenv

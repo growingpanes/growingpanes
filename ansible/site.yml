@@ -16,6 +16,7 @@
     - ANXS.monit
     - ANXS.postgresql
     - zzet.rbenv
+    - ANXS.nginx
 
   tasks:
     - name: add chrome repo key
