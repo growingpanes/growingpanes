@@ -1,0 +1,4 @@
+---
+rbenv_root: /usr/local/rbenv
+rbenv_exe: /usr/local/rbenv/bin/rbenv
+rails_apps: []

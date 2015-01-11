@@ -6,3 +6,4 @@
   name: ANXS.nginx
 - src: https://github.com/zzet/ansible-rbenv-role
   name: zzet.rbenv
+- src: https://github.com/aocole/ansible-unicorn-rbenv

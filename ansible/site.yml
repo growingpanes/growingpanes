@@ -11,13 +11,17 @@
       env: system
       version: v0.4.0
       ruby_version: 2.1.5
+    rails_apps:
+      - name: panesfe
+        ruby_version: 2.1.5
+    nginx_install_method: package
 
   roles:
     - ANXS.monit
     - ANXS.postgresql
     - zzet.rbenv
     - ANXS.nginx
-
+    - ansible-unicorn-rbenv
   tasks:
     - name: add chrome repo key
       apt_key: url=https://dl-ssl.google.com/linux/linux_signing_key.pub state=present

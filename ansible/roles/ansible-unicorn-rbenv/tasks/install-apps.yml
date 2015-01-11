@@ -1,0 +1,42 @@
+---
+- name: Check rubies
+  shell: ls {{ rbenv_root }}/versions/{{ item.ruby_version }}*
+  register: ruby_versions
+  ignore_errors: True
+  changed_when: False
+  with_items: rails_apps
+
+- name: Install ruby
+  command: "{{ rbenv_exe }} install {{ item.1.ruby_version }}"
+  when: ruby_versions.results[item.0] | failed
+  with_indexed_items: rails_apps
+
+# - name: Create application rvm aliases
+#   command: "{{ rbenv_exe }} alias create {{ item.name }} {{ item.ruby_version }}@{{ item.name }} --create creates={{ rbenv_root }}/wrappers/{{ item.name }}"
+#   with_items: rails_apps
+
+- name: Install unicorn gem
+  command: bash -lc "gem install unicorn"
+  args:
+    creates: "{{ rbenv_root }}/shims/unicorn_rails"
+  with_items: rails_apps
+
+- name: Generate application configurations
+  template: src=unicorn-app.j2 dest=/etc/unicorn/{{ item.name }}.conf owner=root group=root mode=0644
+  with_items: rails_apps
+
+- name: Generate application config directory
+  file: dest={{ item.config | default((item.root | default('/var/www/' + item.name + '/shared')) + '/config')}} owner=www-data group=www-data mode=0700 state=directory
+  when: (item.db is defined) or (item.secrets is defined)
+  with_items: rails_apps
+
+- name: Generate application database.yml
+  template: src=database.yml.j2 dest={{ item.config | default((item.root | default('/var/www/' + item.name + '/shared')) + '/config')}}/database.yml owner=www-data group=www-data mode=0600
+  when: item.db is defined
+  with_items: rails_apps
+
+- name: Generate application secrets.yml
+  template: src=secrets.yml.j2 dest={{ item.config | default((item.root | default('/var/www/' + item.name + '/shared')) + '/config')}}/secrets.yml owner=www-data group=www-data mode=0600
+  when: item.secrets is defined
+  with_items: rails_apps
+
