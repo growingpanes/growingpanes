@@ -1,0 +1,7 @@
+- name: restart unicorn
+  service: name=unicorn state=restarted
+  sudo: yes
+
+- name: reload unicorn
+  service: name=unicorn state=reloaded
+  sudo: yes

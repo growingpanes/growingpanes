@@ -48,7 +48,7 @@
   with_items: rbenv_users
   sudo: true
   sudo_user: "{{ item.name }}"
-  when: not "system" == "{{ rbenv.env }}"
+  when: rbenv.env != "system"
   ignore_errors: true
   tags:
     - rbenv
@@ -58,7 +58,7 @@
   with_items: rbenv_users
   sudo: true
   sudo_user: "{{ item.name }}"
-  when: not "system" == "{{ rbenv.env }}"
+  when: rbenv.env != "system"
   ignore_errors: true
   tags:
     - rbenv
@@ -74,7 +74,7 @@
     - rbenv_plugins
   sudo: true
   sudo_user: "{{ item[0].name }}"
-  when: not "system" == "{{ rbenv.env }}"
+  when: rbenv.env != "system"
   ignore_errors: true
   tags:
     - rbenv
@@ -93,7 +93,7 @@
   sudo: true
   sudo_user: "{{ item.name }}"
   when:
-    - not "system" == "{{ rbenv.env }}"
+    - rbenv.env != "system"
     - default_gems_file is not defined
   ignore_errors: true
   tags:
@@ -105,7 +105,7 @@
   sudo: true
   sudo_user: "{{ item.name }}"
   when:
-    - not "system" == "{{ rbenv.env }}"
+    - rbenv.env != "system"
     - default_gems_file is defined
   ignore_errors: true
   tags:
@@ -116,7 +116,7 @@
   with_items: rbenv_users
   sudo: true
   sudo_user: "{{ item.name }}"
-  when: not "system" == "{{ rbenv.env }}"
+  when: rbenv.env != "system"
   ignore_errors: true
   tags:
     - rbenv
@@ -126,7 +126,7 @@
   with_items: rbenv_users
   sudo: true
   sudo_user: "{{ item.name }}"
-  when: not "system" == "{{ rbenv.env }}"
+  when: rbenv.env != "system"
   ignore_errors: true
   tags:
     - rbenv
@@ -161,7 +161,7 @@
   sudo: true
   sudo_user: "{{ item.name }}"
   with_items: rbenv_users
-  when: not "system" == "{{ rbenv.env }}"
+  when: rbenv.env != "system"
   register: ruby_installed
   ignore_errors: yes
   tags:
@@ -173,7 +173,7 @@
   with_together:
     - ruby_installed.results
     - rbenv_users
-  when: (not "system" == "{{ rbenv.env }}") and (item[0].rc != 0)
+  when: (rbenv.env != "system") and (item[0].rc != 0)
   ignore_errors: true
   tags:
     - rbenv
@@ -185,7 +185,7 @@
   with_together:
     - ruby_installed.results
     - rbenv_users
-  when: (not "system" == "{{ rbenv.env }}") and (item[0].rc != 0)
+  when: (rbenv.env != "system") and (item[0].rc != 0)
   ignore_errors: true
   tags:
     - rbenv
@@ -197,7 +197,7 @@
   with_together:
     - ruby_installed.results
     - rbenv_users
-  when: (not "system" == "{{ rbenv.env }}") and (item[0].rc != 0)
+  when: (rbenv.env != "system") and (item[0].rc != 0)
   ignore_errors: true
   tags:
     - rbenv

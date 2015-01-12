@@ -1,0 +1,6 @@
+---
+# tasks file for app-user
+- name: create app user
+  user: name={{panesfe.user}}
+  args:
+    shell: /bin/bash

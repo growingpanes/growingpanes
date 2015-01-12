@@ -1,0 +1,21 @@
+---
+- name: deploy app
+  tags: deploy
+  git: dest={{ panesfe.checkout_dir }}
+       repo=https://github.com/aocole/panesfe
+       depth=1
+  notify:
+    - restart unicorn
+
+- name: install bundler
+  command: bash -lc "gem install bundler; rbenv rehash"
+  args:
+    chdir: "{{ panesfe.checkout_dir }}"
+
+- name: bundle install
+  command: bash -lc "bundle install --without development test"
+  args:
+    chdir: "{{ panesfe.checkout_dir }}"
+
+- name: create tmp dir
+  command: bash -lc "mkdir -p {{ panesfe.checkout_dir }}/tmp/pids; mkdir -p {{ panesfe.checkout_dir }}/tmp/sockets"
