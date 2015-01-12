@@ -1,9 +1,0 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
-one:
-  presentation_id: 
-  image: MyString
-
-two:
-  presentation_id: 
-  image: MyString
