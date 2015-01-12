@@ -4,7 +4,8 @@ source 'https://rubygems.org'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~>4.1'
 # Use sqlite3 as the database for Active Record
-gem 'sqlite3'
+gem 'sqlite3', groups: [:development, :test]
+gem 'pg', group: :production
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 # Use CoffeeScript for .js.coffee assets and views
@@ -29,7 +30,7 @@ gem 'pry-rails',        group: :development
 # gem 'bcrypt', '~> 3.1.7'
 
 # Use unicorn as the app server
-# gem 'unicorn'
+gem 'unicorn', group: :production
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
@@ -43,10 +44,10 @@ gem "therubyracer"
 gem "less-rails" #Sprockets (what Rails 3.1 uses for its asset pipeline) supports LESS
 gem "twitter-bootstrap-rails"
 
-gem 'dotenv-rails', :groups => [:development, :test]
+gem 'dotenv-rails', groups: [:development, :test]
 
-gem 'better_errors', :groups => [:development]
-gem 'binding_of_caller', :groups => [:development]
+gem 'better_errors', groups: [:development]
+gem 'binding_of_caller', groups: [:development]
 
 gem 'delayed_job_active_record'
 gem 'rest-client'
