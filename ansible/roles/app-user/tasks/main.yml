@@ -4,3 +4,7 @@
   user: name={{panesfe.user}}
   args:
     shell: /bin/bash
+- name: create videowall user
+  user: name={{videowall.user}}
+  args:
+    shell: /bin/bash

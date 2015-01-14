@@ -1,6 +1,5 @@
 ---
 - name: deploy app
-  tags: deploy
   git: dest={{ panesfe.checkout_dir }}
        repo=https://github.com/aocole/panesfe
        depth=1
@@ -12,6 +11,11 @@
   args:
     chdir: "{{ panesfe.checkout_dir }}"
 
+- name: install libpq # for ruby postgres client
+  apt: name=libpq-dev update_cache=yes
+  sudo: yes
+  sudo_user: root
+
 - name: bundle install
   command: bash -lc "bundle install --without development test"
   args:
@@ -19,3 +23,53 @@
 
 - name: create tmp dir
   command: bash -lc "mkdir -p {{ panesfe.checkout_dir }}/tmp/pids; mkdir -p {{ panesfe.checkout_dir }}/tmp/sockets"
+
+- name: migrate db
+  command: bash -lc "RAILS_ENV=production bundle exec rake db:migrate"
+  args:
+    chdir: "{{ panesfe.checkout_dir }}"
+
+- name: precompile assets
+  command: bash -lc "RAILS_ENV=production bundle exec rake assets:precompile"
+  args:
+    chdir: "{{ panesfe.checkout_dir }}"
+
+- name: template nginx config
+  template: 
+    dest: /etc/nginx/sites-available/panesfe
+    group: root
+    owner: root
+    mode: u=rw,g=r,o=r
+    src: ../templates/panesfe.j2
+  notify:
+    - restart nginx
+  sudo: yes
+  sudo_user: root
+
+- name: Nginx | Disable the default site
+  file:
+    path: "{{nginx_dir}}/sites-enabled/default"
+    state: absent
+  notify:
+    - restart nginx
+  sudo: yes
+  sudo_user: root
+
+- name: Nginx | Enable panesfe site
+  file:
+    path: "{{nginx_dir}}/sites-enabled/panesfe"
+    src: "{{nginx_dir}}/sites-available/panesfe"
+    state: link
+  notify:
+    - restart nginx
+  sudo: yes
+  sudo_user: root
+
+- include_vars: ../../../secrets.yml
+  no_log: True
+
+- name: template app secrets
+  template: 
+    dest: "{{ panesfe.checkout_dir }}/config/secrets.yml"
+    mode: u=rw,g=r
+    src: ../templates/secrets.yml.j2

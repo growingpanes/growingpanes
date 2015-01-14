@@ -6,6 +6,8 @@
   sudo: yes
 
   vars:
+    videowall:
+      user: videowall
     panesfe:
       checkout_dir: "/home/panes/panesfe"
       user: panes
@@ -22,6 +24,17 @@
     nginx_install_method: package
     rbenv_root: "{{ rbenv_users[0].home }}/.rbenv"
     rbenv_exe: "{{ rbenv_root }}/bin/rbenv"
+    # List of databases to be created (optional)
+    postgresql_databases:
+      - name: panesfe
+        # hstore: yes         # flag to install the hstore extension on this database (yes/no)
+        # uuid_ossp: yes      # flag to install the uuid-ossp extension on this database (yes/no)
+
+    # List of users to be created (optional)
+    postgresql_users:
+      - name: panesfe
+        pass: panesfe # TODO: generate
+        encrypted: no       # denotes if the password is already encrypted.
 
   roles:
     - { role: app-user,              sudo: yes, sudo_user: root }
@@ -29,6 +42,6 @@
     - { role: ANXS.postgresql,       sudo: yes, sudo_user: root }
     - { role: zzet.rbenv,            sudo: yes, sudo_user: root }
     - { role: ANXS.nginx,            sudo: yes, sudo_user: root }
-    - { role: ansible-unicorn-rbenv, sudo: yes, sudo_user: root }
-    - { role: chrome,                sudo: yes, sudo_user: root }
-    - { role: deploy-app,            sudo: yes, sudo_user: "{{ panesfe.user }}" }
+    - { role: ansible-unicorn-rbenv, sudo: yes, sudo_user: root, tags: ['unicorn'] }
+    - { role: chrome,                sudo: yes, sudo_user: root, tags: ['chrome'] }
+    - { role: deploy-app,            sudo: yes, sudo_user: "{{ panesfe.user }}", tags: ['deploy'] }
