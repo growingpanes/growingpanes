@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	ghttp "github.com/gorilla/http"
 	"github.com/gorilla/mux"
@@ -16,6 +17,7 @@ import (
 	"os"
 	"runtime"
 	"strconv"
+	"time"
 )
 
 type Tab struct {
@@ -65,6 +67,7 @@ func main() {
 	logger = log.New(os.Stdout, "PanesD ", log.Lshortfile)
 
 	chrome, err := getChrome()
+	errCheck(err)
 
 	// turn console on
 	// request, err := jsonrpc.EncodeClientRequest("Console.enable", nil)
@@ -82,6 +85,9 @@ func main() {
 			err := chrome.ReadJSON(&consoleMessage)
 			if err != nil {
 				logger.Println(err)
+				logger.Println("Trying to reconnect to Chrome")
+				chrome, err = getChrome()
+				errCheck(err)
 			} else {
 				// logger.Println(consoleMessage)
 				if len(consoleMessage.Method) != 0 {
@@ -130,20 +136,31 @@ func main() {
 }
 
 func getChrome() (*websocket.Conn, error) {
-	// get available tabs and websocket urls from Chrome
-	tabs := getTabs()
+	var tab Tab
 
-	// Set up websockets connection to Chrome tab
-	netConn, err := net.Dial("tcp", host+":"+strconv.Itoa(port))
-	// netConn, err := net.Dial("tcp", "echo.websocket.org:80")
-	errCheck(err)
-	wsUrl := tabs[0].WebSocketDebuggerUrl
-	// wsUrl = "ws://echo.websocket.org/?encoding=text"
-	logger.Println("Connecting to " + wsUrl)
-	url, err := url.Parse(wsUrl)
-	errCheck(err)
-	chrome, _, err := websocket.NewClient(netConn, url, nil, 2048, 2048)
-	return chrome, err
+	for tab.WebSocketDebuggerUrl == "" {
+		// get available tabs and websocket urls from Chrome
+		tabs := getTabs()
+
+		if len(tabs) < 1 {
+			time.Sleep(100 * time.Millisecond)
+			continue
+		}
+		tab = tabs[0]
+		wsUrl := tab.WebSocketDebuggerUrl
+		// wsUrl = "ws://echo.websocket.org/?encoding=text"
+		logger.Println("Connecting to " + wsUrl)
+		url, err := url.Parse(wsUrl)
+		errCheck(err)
+
+		// Set up websockets connection to Chrome tab
+		netConn, err := net.Dial("tcp", host+":"+strconv.Itoa(port))
+		errCheck(err)
+		chrome, _, err := websocket.NewClient(netConn, url, nil, 2048, 2048)
+		return chrome, err
+	}
+
+	return nil, errors.New("Shouldn't have gotten here.")
 }
 
 func navigate(chrome *websocket.Conn, url string) error {
@@ -166,7 +183,8 @@ func getTabs() []Tab {
 
 	var response bytes.Buffer
 	if _, err := ghttp.Get(&response, url); err != nil {
-		log.Fatalf("could not fetch: %v", err)
+		log.Printf("could not fetch: %v", err)
+		return nil
 	}
 
 	var tabs []Tab
