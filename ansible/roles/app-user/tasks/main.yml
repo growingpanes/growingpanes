@@ -8,3 +8,7 @@
   user: name={{videowall.user}}
   args:
     shell: /bin/bash
+- name: create panesd user
+  user: name={{panesd.user}}
+  args:
+    shell: /bin/bash

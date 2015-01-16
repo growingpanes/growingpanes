@@ -1,0 +1,11 @@
+---
+# display device control
+- name: libcec dependencies | {{ item.name }}
+  apt: name={{ item.name }}
+  with_items:
+    - {name: libudev-dev}
+    - {name: pkg-config}
+    - {name: libtool}
+  sudo: yes
+  sudo_user: root
+

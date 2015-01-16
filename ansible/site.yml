@@ -9,8 +9,11 @@
     videowall:
       user: videowall
     panesfe:
-      checkout_dir: "/home/panes/panesfe"
-      user: panes
+      checkout_dir: "/home/panesfe/panesfe"
+      user: panesfe
+    panesd:
+      user: panesd
+      github_checkout: github.com/aocole/panesd
     rbenv:
       env: user
       version: v0.4.0
@@ -37,7 +40,7 @@
         encrypted: no       # denotes if the password is already encrypted.
 
   roles:
-    - { role: app-user,              sudo: yes, sudo_user: root }
+    - { role: app-user,              sudo: yes, sudo_user: root, tags: ['users'] }
     - { role: ANXS.monit,            sudo: yes, sudo_user: root }
     - { role: ANXS.postgresql,       sudo: yes, sudo_user: root }
     - { role: zzet.rbenv,            sudo: yes, sudo_user: root }
@@ -45,3 +48,4 @@
     - { role: ansible-unicorn-rbenv, sudo: yes, sudo_user: root, tags: ['unicorn'] }
     - { role: chrome,                sudo: yes, sudo_user: root, tags: ['chrome'] }
     - { role: deploy-app,            sudo: yes, sudo_user: "{{ panesfe.user }}", tags: ['deploy'] }
+    - { role: deploy-panesd,         sudo: yes, sudo_user: "{{ panesd.user }}", tags: ['panesd'] }

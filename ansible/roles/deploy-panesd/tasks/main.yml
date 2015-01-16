@@ -1,0 +1,55 @@
+---
+- name: download Go
+  get_url:
+    url: https://storage.googleapis.com/golang/go1.4.1.linux-amd64.tar.gz
+    dest: /tmp/go-dist.tgz
+    sha256sum: 2d8b33d973f85ccb8716c7b94b6c899d10579edf6f4eed2bc005567d6b733d7f
+
+- name: install Go
+  command: "tar -C /usr/local -xzf /tmp/go-dist.tgz"
+  args: 
+    creates: /usr/local/go/bin/go
+  sudo: true
+  sudo_user: root
+
+- name: add Go to PATH
+  lineinfile: 
+    line: "export PATH=$PATH:/usr/local/go/bin"
+    regexp: "^export PATH=$PATH:/usr/local/go/bin$"
+    dest: "/etc/profile"
+  sudo: true
+  sudo_user: root
+
+- name: set GOPATH
+  lineinfile: 
+    line: "export GOPATH=$HOME"
+    regexp: "^export GOPATH=\\$HOME$"
+    dest: "/home/{{ panesd.user }}/.bashrc"
+    insertbefore: "^# If not running interactively, don't do anything$"
+
+- name: deploy app
+  git: dest=/home/{{ panesd.user }}/src/{{ panesd.github_checkout }}
+       repo=https://{{ panesd.github_checkout }}
+       depth=1
+
+- name: go get dependencies
+  command: bash -lc "go get"
+  args:
+    chdir: "/home/{{ panesd.user }}/src/{{ panesd.github_checkout }}"
+
+- name: go build/install
+  command: bash -lc "go install"
+  args:
+    chdir: "/home/{{ panesd.user }}/src/{{ panesd.github_checkout }}"
+
+- name: Install panesd init script
+  template: src=etc/init.d/panesd dest=/etc/init.d/panesd owner=root group=root mode=0755
+  sudo: true
+  sudo_user: root
+
+- name: Enable panesd service
+  service: name=panesd enabled=yes
+  sudo: true
+  sudo_user: root
+
+- include: cec_control.yml
