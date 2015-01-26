@@ -14,6 +14,9 @@
 - name: install lightdm-gtk-greeter
   apt: name=lightdm-gtk-greeter
 
+- name: install arandr
+  apt: name=arandr
+
 - name: install matchbox-window-manager
   apt: name=matchbox-window-manager
 
@@ -41,14 +44,16 @@
   sudo: yes
   sudo_user: root
 
-# - name: download nvidia driver
-#   get_url:
-#     dest: /tmp
-#     url: http://us.download.nvidia.com/XFree86/Linux-x86_64/340.65/NVIDIA-Linux-x86_64-340.65.run
-#     sha256sum: cd3948db5c1e2468c50140efb4bb50f1a4c84c923db8ec756bd56ff35df9ff04
-#     mode: 0644
+- name: download nvidia driver
+  get_url:
+    dest: /tmp
+    url: http://us.download.nvidia.com/XFree86/Linux-x86_64/340.65/NVIDIA-Linux-x86_64-340.65.run
+    sha256sum: cd3948db5c1e2468c50140efb4bb50f1a4c84c923db8ec756bd56ff35df9ff04
+    mode: 0755
 
-# - name: install nvidia driver
-#   command: /tmp/NVIDIA-Linux-x86_64-340.65.run --accept-license --no-questions --ui=none --run-nvidia-xconfig
-#   sudo: yes
-#   sudo_user: root
+- name: install nvidia driver
+  command: /tmp/NVIDIA-Linux-x86_64-340.65.run --accept-license --no-questions --ui=none --run-nvidia-xconfig
+  sudo: yes
+  sudo_user: root
+  args: 
+    creates: /usr/lib/libnvidia-glcore.so.340.65

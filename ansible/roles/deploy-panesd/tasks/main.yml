@@ -3,7 +3,7 @@
   get_url:
     url: https://storage.googleapis.com/golang/go1.4.1.linux-amd64.tar.gz
     dest: /tmp/go-dist.tgz
-    sha256sum: 2d8b33d973f85ccb8716c7b94b6c899d10579edf6f4eed2bc005567d6b733d7f
+    sha256sum: 68170d5d48fc317155e69d2b55e4c09878433462ddb77d7900db6590ce2bef49
 
 - name: install Go
   command: "tar -C /usr/local -xzf /tmp/go-dist.tgz"

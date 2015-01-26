@@ -5,6 +5,14 @@ This sets up a bare Ubuntu 14.04 install to be a Growing Panes video wall
 controller. Should work with a server install but using a desktop install
 is probably best. Developed with Ansible 1.8.2.
 
-* Install requirements with `ansible-galaxy install -r requirements`
-* edit `dev` or create new inventory file as appropriate
-* configure system with `ansible-playbook site.yml -i dev`
+On Server:
+  * Install Ubuntu 14.04 server set up with sshd installed
+  * It will probably not boot correctly with nvidia hardware installed. To fix, press `e` at the grub menu to edit. Add `nomodeset` to the linux kernel line.
+  * Once booted, edit `/etc/default/grub` and add `nomodeset` to the `GRUB_CMDLINE_LINUX_DEFAULT` line. Run `update-grub` after editing this file.
+  * The server should now boot to a login prompt, although the prompt fades out quickly and cannot be recovered. At least you can SSH in :-)
+  * `sudo apt-get install avahi-daemon` so you can resolve the `.local` address of the server
+
+On your workstation:
+  * Install requirements with `ansible-galaxy install -r requirements`
+  * edit `dev` or create new inventory file as appropriate
+  * configure system with `ansible-playbook site.yml -i dev`
