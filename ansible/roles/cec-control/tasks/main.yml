@@ -1,0 +1,47 @@
+---
+- name: "libcec dependencies"
+  apt: "name={{ item.name }} state={{ item.state | default('present') }} purge={{ item.purge | default('no') }} install_recommends={{ item.install_recommends | default('yes') }} update_cache=yes cache_valid_time=600"
+  with_items:
+    - {name: autoconf}
+    - {name: automake}
+    - {name: libudev-dev}
+    - {name: libtool}
+    - {name: pkg-config}
+  sudo: yes
+  sudo_user: root
+
+- name: check out libcec source
+  git: dest=/tmp/libcec repo=https://github.com/Pulse-Eight/libcec.git
+       depth=1 version=libcec-2.2.0-repack
+
+- name: bootstrap
+  command: ./bootstrap
+  args: 
+    creates: /tmp/libcec/configure
+    chdir: /tmp/libcec
+
+- name: configure
+  command: ./configure
+  args: 
+    creates: /tmp/libcec/Makefile
+    chdir: /tmp/libcec
+
+- name: make
+  command: make
+  args: 
+    creates: /tmp/libcec/src/lib/.libs/libcec.so
+    chdir: /tmp/libcec
+
+- name: make install
+  command: make install
+  sudo: yes
+  sudo_user: root
+  args:
+    chdir: /tmp/libcec
+
+- name: ldconfig
+  command: ldconfig
+  sudo: yes
+  sudo_user: root
+  args:
+    chdir: /tmp/libcec

@@ -1,0 +1,2 @@
+[videowall]
+montana.local ansible_ssh_user=oui

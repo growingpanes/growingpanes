@@ -1,2 +1,5 @@
 ---
 # handlers file for chrome
+- name: update grub
+  command: /usr/sbin/update-grub
+  sudo: yes

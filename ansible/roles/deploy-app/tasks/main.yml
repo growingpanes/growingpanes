@@ -16,6 +16,11 @@
   sudo: yes
   sudo_user: root
 
+- name: install imagemagick
+  apt: name=imagemagick
+  sudo: yes
+  sudo_user: root
+
 - name: bundle install
   command: bash -lc "bundle install --without development test"
   args:

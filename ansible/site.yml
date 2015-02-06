@@ -46,6 +46,7 @@
     - { role: zzet.rbenv,            sudo: yes, sudo_user: root }
     - { role: ANXS.nginx,            sudo: yes, sudo_user: root }
     - { role: ansible-unicorn-rbenv, sudo: yes, sudo_user: root, tags: ['unicorn'] }
+    - { role: cec-control,           sudo: yes, sudo_user: root, tags: ['cec'] }
     - { role: chrome,                sudo: yes, sudo_user: root, tags: ['chrome'] }
     - { role: deploy-app,            sudo: yes, sudo_user: "{{ panesfe.user }}", tags: ['deploy'] }
     - { role: deploy-panesd,         sudo: yes, sudo_user: "{{ panesd.user }}", tags: ['panesd'] }
