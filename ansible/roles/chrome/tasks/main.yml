@@ -54,6 +54,14 @@
   sudo: yes
   sudo_user: root
 
+- name: copy display setup script
+  copy:
+    src: displaySetup.sh
+    dest: "/usr/share/xsessions/displaySetup.sh" # TODO: better place to put this?
+    mode: 0755
+  sudo: yes
+  sudo_user: root
+
 # - name: download nvidia driver
 #   get_url:
 #     dest: /tmp
