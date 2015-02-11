@@ -1,8 +1,17 @@
 ---
+- name: Copy deploy key file
+  copy: src="../../../id_rsa"
+        dest=/home/{{ panesfe.user }}/.ssh/id_rsa_github
+        mode=0600
+        owner={{ panesfe.user }}
+        group={{ panesfe.user }}
+
 - name: deploy app
   git: dest={{ panesfe.checkout_dir }}
-       repo=https://github.com/aocole/panesfe
+       repo=ssh://git@github.com/aocole/panesfe.git
        depth=1
+       ssh_opts="-i /home/{{ panesfe.user }}/.ssh/id_rsa_github"
+       accept_hostkey=yes
   notify:
     - restart unicorn
 
