@@ -43,7 +43,7 @@
     - { role: app-user,              sudo: yes, sudo_user: root, tags: ['users'] }
     - { role: ANXS.monit,            sudo: yes, sudo_user: root }
     - { role: ANXS.postgresql,       sudo: yes, sudo_user: root }
-    - { role: zzet.rbenv,            sudo: yes, sudo_user: root }
+    - { role: zzet.rbenv,            sudo: yes, sudo_user: root, tags: ['rbenv'] }
     - { role: ANXS.nginx,            sudo: yes, sudo_user: root }
     - { role: ansible-unicorn-rbenv, sudo: yes, sudo_user: root, tags: ['unicorn'] }
     - { role: cec-control,           sudo: yes, sudo_user: root, tags: ['cec'] }

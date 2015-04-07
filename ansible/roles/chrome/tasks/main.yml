@@ -82,3 +82,22 @@
   sudo_user: root
   args: 
     creates: /etc/X11/xorg.conf
+
+- name: copy display power script
+  copy:
+    src: displays_on.sh
+    dest: "/usr/local/bin/displays_on.sh"
+    group: dialout
+    mode: 0755
+  sudo: yes
+  sudo_user: root
+
+- name: copy display power script
+  copy:
+    src: displays_off.sh
+    dest: "/usr/local/bin/displays_off.sh"
+    group: dialout
+    mode: 0755
+  sudo: yes
+  sudo_user: root
+
