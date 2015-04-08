@@ -38,6 +38,15 @@
 - name: create tmp dir
   command: bash -lc "mkdir -p {{ panesfe.checkout_dir }}/tmp/pids; mkdir -p {{ panesfe.checkout_dir }}/tmp/sockets"
 
+- include_vars: ../../../secrets.yml
+  no_log: True
+
+- name: template app secrets
+  template: 
+    dest: "{{ panesfe.checkout_dir }}/config/secrets.yml"
+    mode: u=rw,g=r
+    src: ../templates/secrets.yml.j2
+
 - name: migrate db
   command: bash -lc "RAILS_ENV=production bundle exec rake db:migrate"
   args:
@@ -78,12 +87,3 @@
     - restart nginx
   sudo: yes
   sudo_user: root
-
-- include_vars: ../../../secrets.yml
-  no_log: True
-
-- name: template app secrets
-  template: 
-    dest: "{{ panesfe.checkout_dir }}/config/secrets.yml"
-    mode: u=rw,g=r
-    src: ../templates/secrets.yml.j2
