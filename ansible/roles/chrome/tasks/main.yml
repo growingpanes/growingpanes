@@ -32,15 +32,39 @@
     - {name: matchbox-window-manager}
     - {name: nvidia-331}
     - {name: xserver-xorg-video-nouveau, state: absent, purge: yes}
+    - {name: privoxy}
   sudo: yes
   sudo_user: root
-
 
 - name: copy kiosk script
   copy:
     src: chromeKiosk.sh
     dest: "/usr/share/xsessions/chromeKiosk.sh"
     mode: 0755
+  sudo: yes
+  sudo_user: root
+
+- name: copy privoxy config
+  copy:
+    src: privoxy-config
+    dest: "/etc/privoxy/config"
+    mode: 0644
+  sudo: yes
+  sudo_user: root
+
+- name: copy privoxy trustfile
+  copy:
+    src: trust
+    dest: "/etc/privoxy/trust"
+    mode: 0644
+  sudo: yes
+  sudo_user: root
+
+- name: copy privoxy templates
+  copy:
+    src: untrusted
+    dest: "/etc/privoxy/templates/untrusted"
+    mode: 0644
   sudo: yes
   sudo_user: root
 

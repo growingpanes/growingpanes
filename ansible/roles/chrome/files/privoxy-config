@@ -359,9 +359,9 @@ logdir /var/log/privoxy
 #      syntax change was necessary to be consistent with the other
 #      file options and to allow previously forbidden characters.
 #
-actionsfile match-all.action # Actions that are applied to all sites and maybe overruled later on.
-actionsfile default.action   # Main actions file
-actionsfile user.action      # User customizations
+# actionsfile match-all.action # Actions that are applied to all sites and maybe overruled later on.
+# actionsfile default.action   # Main actions file
+# actionsfile user.action      # User customizations
 #
 #  2.5. filterfile
 #  ================
@@ -405,8 +405,8 @@ actionsfile user.action      # User customizations
 #      It is recommended to place any locally adapted filters into a
 #      separate file, such as user.filter.
 #
-filterfile default.filter
-filterfile user.filter      # User customizations
+# filterfile default.filter
+# filterfile user.filter      # User customizations
 #
 #  2.6. logfile
 #  =============
@@ -508,7 +508,7 @@ logfile logfile
 #      Possible applications include limiting Internet access for
 #      children.
 #
-#trustfile trust
+trustfile trust
 #
 #  3. DEBUGGING
 #  =============
@@ -954,7 +954,7 @@ enable-edit-actions 0
 #
 #      enforce-blocks 1
 #
-enforce-blocks 0
+enforce-blocks 1
 #
 #  4.7. ACLs: permit-access and deny-access
 #  =========================================
