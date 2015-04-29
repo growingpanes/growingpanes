@@ -52,6 +52,11 @@
   args:
     chdir: "{{ panesfe.checkout_dir }}"
 
+- name: seed db
+  command: bash -lc "RAILS_ENV=production bundle exec rake db:seed"
+  args:
+    chdir: "{{ panesfe.checkout_dir }}"
+
 - name: precompile assets
   command: bash -lc "RAILS_ENV=production bundle exec rake assets:precompile"
   args:
