@@ -34,7 +34,7 @@ dir="/home/{{ panesd.user }}/bin"
 user="{{ panesd.user }}"
 cmd="./panesd"
 
-name=`basename $0`
+name="panesd"
 pid_file="/var/run/$name.pid"
 stdout_log="/var/log/$name.log"
 stderr_log="/var/log/$name.err"
