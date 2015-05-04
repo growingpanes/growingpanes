@@ -1,0 +1,5 @@
+---
+- name: upgrade all available packages
+  apt:
+    update_cache: yes
+    upgrade: "yes" # for some reason this has to be quoted or else ansible complains

@@ -1,83 +1,115 @@
-#! /bin/bash
-# Go/Revel server init script - Thibaut Colar.
-
+#!/bin/sh
 ### BEGIN INIT INFO
-# Provides:       panesd
-# Required-Start: $network
-# Required-Stop:
-# Default-Start:  2 3 4 5
-# Default-Stop:   0 1 6
-# Short-Description: panesd
+# Provides:
+# Required-Start:    $remote_fs $syslog
+# Required-Stop:     $remote_fs $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Start daemon at boot time
+# Description:       Enable service provided by daemon.
 ### END INIT INFO
 
-USER="{{ panesd.user }}" # User we wil run Go as
-GOPATH="/data/go" # GOPATH
-GO_CMD="panesd"
-WORKDIR="/home/{{ panesd.user }}/bin"
-NAME="panesd" # app name for ogs etc ...
+# Copyright (c) 2012-2014 Felix H. Dahlke
+# Copyright (c) 2015 Andrew Cole
 
-###### Start script ########################################################
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
 
-recursiveKill() { # Recursively kill a process and all subprocesses
-    CPIDS=$(pgrep -P $1);
-    for PID in $CPIDS
-    do
-        recursiveKill $PID
-    done
-    sleep 3 && kill -9 $1 2>/dev/null & # hard kill after 3 seconds
-    kill $1 2>/dev/null # try soft kill first
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
+
+dir="/home/{{ panesd.user }}/bin"
+user="{{ panesd.user }}"
+cmd="./panesd"
+
+name=`basename $0`
+pid_file="/var/run/$name.pid"
+stdout_log="/var/log/$name.log"
+stderr_log="/var/log/$name.err"
+
+get_pid() {
+    cat "$pid_file"
+}
+
+is_running() {
+    [ -f "$pid_file" ] && ps `get_pid` > /dev/null 2>&1
 }
 
 case "$1" in
-      start)
-        echo "Starting $NAME ..."
-        if [ -f "$WORKDIR/$NAME.pid" ]
-        then
-            echo "Already running according to $WORKDIR/$NAME.pid"
+    start)
+    if is_running; then
+        echo "Already started"
+    else
+        echo "Starting $name"
+        cd "$dir"
+        sudo -u "$user" $cmd >> "$stdout_log" 2>> "$stderr_log" &
+        echo $! > "$pid_file"
+        if ! is_running; then
+            echo "Unable to start, see $stdout_log and $stderr_log"
             exit 1
         fi
-        cd "$WORKDIR"
-  export GOPATH="$GOPATH"
-  export PATH="${PATH}:${GOPATH}/bin"
-        /bin/su -m -l $USER -c "$GO_CMD" > "$WORKDIR/$NAME.log" 2>&1 &
-        PID=$!
-        echo $PID > "$WORKDIR/$NAME.pid"
-        echo "Started with pid $PID - Logging to $WORKDIR/$NAME.log" && exit 0
-        ;;
-      stop)
-        echo "Stopping $NAME ..."
-        if [ ! -f "$WORKDIR/$NAME.pid" ]
-        then
-            echo "Already stopped!"
-            exit 1
-        fi
-        PID=`cat "$WORKDIR/$NAME.pid"`
-        recursiveKill $PID
-        rm -f "$WORKDIR/$NAME.pid"
-        echo "stopped $NAME" && exit 0
-        ;;
-      restart)
-        $0 stop
-        sleep 1
-        $0 start
-        ;;
-      status)
-        if [ -f "$WORKDIR/$NAME.pid" ]
-        then
-            PID=`cat "$WORKDIR/$NAME.pid"`
-            if [ "$(/bin/ps --no-headers -p $PID)" ]
-            then
-                echo "$NAME is running (pid : $PID)" && exit 0
-            else
-                echo "Pid $PID found in $WORKDIR/$NAME.pid, but not running." && exit 1
-            fi
-        else
-            echo "$NAME is NOT running" && exit 1
-        fi
+    fi
     ;;
-      *)
-      echo "Usage: /etc/init.d/$NAME {start|stop|restart|status}" && exit 1
-      ;;
+    stop)
+    if is_running; then
+        echo -n "Stopping $name.."
+        kill `get_pid`
+        for i in {1..10}
+        do
+            if ! is_running; then
+                break
+            fi
+
+            echo -n "."
+            sleep 1
+        done
+        echo
+
+        if is_running; then
+            echo "Not stopped; may still be shutting down or shutdown may have failed"
+            exit 1
+        else
+            echo "Stopped"
+            if [ -f "$pid_file" ]; then
+                rm "$pid_file"
+            fi
+        fi
+    else
+        echo "Not running"
+    fi
+    ;;
+    restart)
+    $0 stop
+    if is_running; then
+        echo "Unable to stop, will not attempt to start"
+        exit 1
+    fi
+    $0 start
+    ;;
+    status)
+    if is_running; then
+        echo "Running"
+    else
+        echo "Stopped"
+        exit 1
+    fi
+    ;;
+    *)
+    echo "Usage: $0 {start|stop|restart|status}"
+    exit 1
+    ;;
 esac
 
 exit 0

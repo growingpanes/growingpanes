@@ -38,8 +38,10 @@
       - name: panesfe
         pass: panesfe # TODO: generate
         encrypted: no       # denotes if the password is already encrypted.
+    monit_protection: true
 
   roles:
+    - { role: apt-upgrade,           sudo: yes, sudo_user: root, tags: ['apt', 'upgrade'] }
     - { role: app-user,              sudo: yes, sudo_user: root, tags: ['users'] }
     - { role: ANXS.monit,            sudo: yes, sudo_user: root }
     - { role: ANXS.postgresql,       sudo: yes, sudo_user: root }
