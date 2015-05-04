@@ -1,0 +1,8 @@
+- name: (Monit) Copy the panesd monit service file
+  template:
+    src: etc_monit_conf.d_panesd.j2
+    dest: /etc/monit/conf.d/panesd
+  notify:
+    - restart monit
+  sudo: yes
+  sudo_user: root

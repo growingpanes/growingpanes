@@ -1,0 +1,8 @@
+check process panesd with pidfile /var/run/panesd.pid
+    group panesd
+    start program = "/etc/init.d/panesd start"
+    stop program = "/etc/init.d/panesd stop"
+    if failed port 3001 protocol http request "/status"
+        with timeout 10 seconds
+        then restart
+    if 5 restarts within 5 cycles then timeout
