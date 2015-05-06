@@ -20,15 +20,14 @@
   args:
     chdir: "{{ panesfe.checkout_dir }}"
 
-- name: install libpq # for ruby postgres client
-  apt: name=libpq-dev update_cache=yes
+- name: install {{ item }}
+  apt: name={{ item }}
   sudo: yes
   sudo_user: root
-
-- name: install imagemagick
-  apt: name=imagemagick
-  sudo: yes
-  sudo_user: root
+  with_items:
+    - libpq-dev
+    - imagemagick
+    - libav-tools
 
 - name: bundle install
   command: bash -lc "bundle install --without development test"
