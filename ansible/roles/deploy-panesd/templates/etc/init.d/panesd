@@ -30,8 +30,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-dir="/home/{{ panesd.user }}/bin"
-user="{{ panesd.user }}"
+dir="/home/{{ panesd_user }}/bin"
+user="{{ panesd_user }}"
 cmd="./panesd"
 
 name="panesd"

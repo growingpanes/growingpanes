@@ -8,22 +8,20 @@
   vars:
     videowall:
       user: videowall
-    panesfe:
-      checkout_dir: "/home/panesfe/panesfe"
-      user: panesfe
-    panesd:
-      user: panesd
-      github_checkout: github.com/aocole/panesd
+    panesfe_checkout_dir: "/home/panesfe/panesfe"
+    panesfe_user: panesfe
+    panesd_user: panesd
+    panesd_github_checkout: github.com/aocole/panesd
     rbenv:
       env: user
       version: v0.4.0
       ruby_version: 2.1.5
     rbenv_users:
-      - { name: "{{ panesfe.user }}", home: "/home/{{ panesfe.user }}/", comment: "Deploy user" }
+      - { name: "{{ panesfe_user }}", home: "/home/{{ panesfe_user }}/", comment: "Deploy user" }
     rails_apps:
       - name: panesfe
         ruby_version: 2.1.5
-        root: "{{ panesfe.checkout_dir }}"
+        root: "{{ panesfe_checkout_dir }}"
     nginx_install_method: package
     rbenv_root: "{{ rbenv_users[0].home }}/.rbenv"
     rbenv_exe: "{{ rbenv_root }}/bin/rbenv"
@@ -50,5 +48,5 @@
     - { role: ansible-unicorn-rbenv, sudo: yes, sudo_user: root, tags: ['unicorn'] }
     - { role: cec-control,           sudo: yes, sudo_user: root, tags: ['cec'] }
     - { role: chrome,                sudo: yes, sudo_user: root, tags: ['chrome'] }
-    - { role: deploy-app,            sudo: yes, sudo_user: "{{ panesfe.user }}", tags: ['panesfe', 'deploy'] }
-    - { role: deploy-panesd,         sudo: yes, sudo_user: "{{ panesd.user }}", tags: ['panesd', 'deploy'] }
+    - { role: deploy-app,            sudo: yes, sudo_user: "{{ panesfe_user }}", tags: ['panesfe', 'deploy'] }
+    - { role: deploy-panesd,         sudo: yes, sudo_user: "{{ panesd_user }}", tags: ['panesd', 'deploy'] }

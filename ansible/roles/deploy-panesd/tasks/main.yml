@@ -24,42 +24,42 @@
   lineinfile: 
     line: "export GOPATH=$HOME"
     regexp: "^export GOPATH=\\$HOME$"
-    dest: "/home/{{ panesd.user }}/.bashrc"
+    dest: "/home/{{ panesd_user }}/.bashrc"
     insertbefore: "^# If not running interactively, don't do anything$"
 
 - name: Create .ssh dir
-  file: path=/home/{{ panesd.user }}/.ssh
+  file: path=/home/{{ panesd_user }}/.ssh
         state=directory
 
 - name: Copy deploy key file
   copy: src="../../../id_rsa"
-        dest=/home/{{ panesd.user }}/.ssh/id_rsa_github
+        dest=/home/{{ panesd_user }}/.ssh/id_rsa_github
         mode=0600
-        owner={{ panesd.user }}
-        group={{ panesd.user }}
+        owner={{ panesd_user }}
+        group={{ panesd_user }}
 
 - name: deploy app
-  git: dest=/home/{{ panesd.user }}/src/{{ panesd.github_checkout }}
-       repo=ssh://git@{{ panesd.github_checkout }}.git
-       key_file=/home/{{ panesd.user }}/.ssh/id_rsa_github
+  git: dest=/home/{{ panesd_user }}/src/{{ panesd_github_checkout }}
+       repo=ssh://git@{{ panesd_github_checkout }}.git
+       key_file=/home/{{ panesd_user }}/.ssh/id_rsa_github
        accept_hostkey=yes
        depth=1
 
 - name: go get dependencies
   command: bash -lc "go get"
   args:
-    chdir: "/home/{{ panesd.user }}/src/{{ panesd.github_checkout }}"
+    chdir: "/home/{{ panesd_user }}/src/{{ panesd_github_checkout }}"
 
 - name: go build/install
   command: bash -lc "go install"
   args:
-    chdir: "/home/{{ panesd.user }}/src/{{ panesd.github_checkout }}"
+    chdir: "/home/{{ panesd_user }}/src/{{ panesd_github_checkout }}"
 
 - name: link config file
   file:
     state: link
-    src: "/home/{{ panesd.user }}/src/{{ panesd.github_checkout }}/config_default.json"
-    path: "/home/{{ panesd.user }}/bin/config_default.json"
+    src: "/home/{{ panesd_user }}/src/{{ panesd_github_checkout }}/config_default.json"
+    path: "/home/{{ panesd_user }}/bin/config_default.json"
 
 - name: Install panesd init script
   template: src=etc/init.d/panesd dest=/etc/init.d/panesd owner=root group=root mode=0755

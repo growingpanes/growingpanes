@@ -2,7 +2,7 @@
 
 
 upstream unicorn {
-	server unix:{{ panesfe.checkout_dir }}/tmp/sockets/unicorn.sock fail_timeout=0;
+	server unix:{{ panesfe_checkout_dir }}/tmp/sockets/unicorn.sock fail_timeout=0;
 }
 
 server {
@@ -13,9 +13,16 @@ server {
 
   client_max_body_size 4G;
 
-  root {{ panesfe.checkout_dir }}/public; # Set this to the public folder location of your Rails application.
+  root {{ panesfe_checkout_dir }}/public; # Set this to the public folder location of your Rails application.
 
   try_files $uri/index.html $uri.html $uri @unicorn;
+
+  {% if panesfe_upload_root_dir %}
+
+  location ^~ /{{ panesfe_upload_url_prefix }}/ {
+    root {{ panesfe_upload_root_dir }}/;
+  }
+  {% endif %}
 
   location @unicorn {
           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;

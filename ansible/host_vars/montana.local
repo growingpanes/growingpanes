@@ -1,0 +1,7 @@
+---
+ansible_ssh_user: oui
+panesfe_upload_drive_dev: /dev/sdb1
+panesfe_upload_drive_mount_point: /mnt/upload
+panesfe_upload_root_dir: "{{ panesfe_upload_drive_mount_point }}/"
+panesfe_upload_url_prefix: uploads
+

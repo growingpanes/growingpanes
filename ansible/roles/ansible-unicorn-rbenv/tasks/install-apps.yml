@@ -19,8 +19,8 @@
 #   command: bash -lc "gem install unicorn"
 #   args:
 #     creates: "{{ rbenv_root }}/shims/unicorn"
-#     chdir: "/home/{{ panesfe.user }}"
-#     sudo_user: "{{ panesfe.user }}"
+#     chdir: "/home/{{ panesfe_user }}"
+#     sudo_user: "{{ panesfe_user }}"
 #   with_items: rails_apps
 
 - name: Generate application configurations

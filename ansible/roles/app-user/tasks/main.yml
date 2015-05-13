@@ -1,7 +1,7 @@
 ---
 # tasks file for app-user
 - name: create app user
-  user: name={{panesfe.user}}
+  user: name={{panesfe_user}}
   args:
     shell: /bin/bash
 - name: create videowall user
@@ -10,7 +10,7 @@
     shell: /bin/bash
     groups: dialout # necessary so videowall user can access USB CEC devices
 - name: create panesd user
-  user: name={{panesd.user}}
+  user: name={{panesd_user}}
   args:
     shell: /bin/bash
 
