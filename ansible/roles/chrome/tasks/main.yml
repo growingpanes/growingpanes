@@ -84,6 +84,22 @@
   sudo: yes
   sudo_user: root
 
+- name: create chrome policy dir
+  file:
+    path: /etc/opt/chrome/policies/managed
+    mode: u=rwx,g=rx,o=rx
+    state: directory
+  sudo: yes
+  sudo_user: root
+
+- name: copy chrome policy
+  copy:
+    src: videowall_policy.json
+    dest: "/etc/opt/chrome/policies/managed/videowall_policy.json"
+    mode: 0644
+  sudo: yes
+  sudo_user: root
+
 - name: copy display setup script
   copy:
     src: displaySetup.sh
