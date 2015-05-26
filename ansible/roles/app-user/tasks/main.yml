@@ -5,7 +5,7 @@
   args:
     shell: /bin/bash
 - name: create videowall user
-  user: name={{videowall.user}}
+  user: name={{videowall_user}}
   args:
     shell: /bin/bash
     groups: dialout # necessary so videowall user can access USB CEC devices

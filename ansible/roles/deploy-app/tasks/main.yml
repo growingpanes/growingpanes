@@ -19,11 +19,11 @@
   command: bash -lc "gem install bundler; rbenv rehash"
   args:
     chdir: "{{ panesfe_checkout_dir }}"
+  become_user: "{{ panesfe_user }}"
 
 - name: install {{ item }}
   apt: name={{ item }}
-  sudo: yes
-  sudo_user: root
+  become_user: root
   with_items:
     - libpq-dev
     - imagemagick
@@ -33,6 +33,7 @@
   command: bash -lc "bundle install --without development test"
   args:
     chdir: "{{ panesfe_checkout_dir }}"
+  become_user: "{{ panesfe_user }}"
 
 - name: create tmp dir
   command: bash -lc "mkdir -p {{ panesfe_checkout_dir }}/tmp/pids; mkdir -p {{ panesfe_checkout_dir }}/tmp/sockets"
@@ -46,20 +47,13 @@
     mode: u=rw,g=r
     src: ../templates/secrets.yml.j2
 
-- name: template app config
-  template: 
-    dest: "{{ panesfe_checkout_dir }}/config/video_wall_config.ini"
-    mode: u=rw,g=r
-    src: ../templates/video_wall_config.ini.j2
-
 - name: mount upload drive
   mount:
     fstype: ext4
     name: "{{ panesfe_upload_drive_mount_point }}"
     src: "{{ panesfe_upload_drive_dev }}"
     state: mounted
-  sudo: yes
-  sudo_user: root
+  become_user: root
   when: panesfe_upload_root_dir is defined
 
 - name: set permissions on upload dir
@@ -68,8 +62,7 @@
     owner: panesfe
     path: "{{ panesfe_upload_root_dir }}"
     state: directory
-  sudo: yes
-  sudo_user: root
+  become_user: root
   when: panesfe_upload_root_dir is defined
 
 - name: migrate db
@@ -96,8 +89,7 @@
     src: ../templates/panesfe.j2
   notify:
     - restart nginx
-  sudo: yes
-  sudo_user: root
+  become_user: root
 
 - name: Nginx | Disable the default site
   file:
@@ -105,8 +97,7 @@
     state: absent
   notify:
     - restart nginx
-  sudo: yes
-  sudo_user: root
+  become_user: root
 
 - name: Nginx | Enable panesfe site
   file:
@@ -115,5 +106,4 @@
     state: link
   notify:
     - restart nginx
-  sudo: yes
-  sudo_user: root
+  become_user: root

@@ -1,0 +1,8 @@
+---
+- name: template app config
+  template: 
+    dest: /etc/video_wall_config.json
+    mode: u=rw,g=r,o=r
+    src: ../templates/video_wall_config.json.j2
+    owner: "{{ videowall_user }}"
+

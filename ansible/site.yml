@@ -6,8 +6,7 @@
   sudo: yes
 
   vars:
-    videowall:
-      user: videowall
+    videowall_user: videowall
     panesfe_checkout_dir: "/home/panesfe/panesfe"
     panesfe_user: panesfe
     panesd_user: panesd
@@ -48,5 +47,6 @@
     - { role: ansible-unicorn-rbenv, sudo: yes, sudo_user: root, tags: ['unicorn'] }
     - { role: cec-control,           sudo: yes, sudo_user: root, tags: ['cec'] }
     - { role: chrome,                sudo: yes, sudo_user: root, tags: ['chrome'] }
-    - { role: deploy-app,            sudo: yes, sudo_user: "{{ panesfe_user }}", tags: ['panesfe', 'deploy'] }
-    - { role: deploy-panesd,         sudo: yes, sudo_user: "{{ panesd_user }}", tags: ['panesd', 'deploy'] }
+    - { role: videowall-config,      sudo: yes, sudo_user: root, tags: ['panesd', 'panesfe', 'deploy'] }
+    - { role: deploy-app,            become_user: "{{ panesfe_user }}",   tags: ['panesfe', 'deploy'] }
+    - { role: deploy-panesd,         sudo: yes, sudo_user: "{{ panesd_user }}",    tags: ['panesd', 'deploy'] }

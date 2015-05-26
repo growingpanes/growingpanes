@@ -1,0 +1,11 @@
+{
+	"default_disk_quota_mb" : 100,
+
+	// If this starts with a slash, it will be absolute, otherwise relative to Rails.root
+	"upload_root_dir" : "{{ panesfe_upload_root_dir|default("public/") }}",
+	"upload_url_prefix" : "{{ panesfe_upload_url_prefix|default("") }}",
+
+	"panesfe_endpoint" : "http://localhost",
+	"slide_timeout" : 30,
+	"presentation_timeout" : 120
+}

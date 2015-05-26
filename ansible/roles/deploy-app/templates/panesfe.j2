@@ -17,7 +17,7 @@ server {
 
   try_files $uri/index.html $uri.html $uri @unicorn;
 
-  {% if panesfe_upload_root_dir %}
+  {% if panesfe_upload_root_dir is defined %}
 
   location ^~ /{{ panesfe_upload_url_prefix }}/ {
     root {{ panesfe_upload_root_dir }}/;
