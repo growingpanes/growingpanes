@@ -55,12 +55,6 @@
   args:
     chdir: "/home/{{ panesd_user }}/src/{{ panesd_github_checkout }}"
 
-- name: link config file
-  file:
-    state: link
-    src: "/home/{{ panesd_user }}/src/{{ panesd_github_checkout }}/config_default.json"
-    path: "/home/{{ panesd_user }}/bin/config_default.json"
-
 - name: Install panesd init script
   template: src=etc/init.d/panesd dest=/etc/init.d/panesd owner=root group=root mode=0755
   sudo: true
