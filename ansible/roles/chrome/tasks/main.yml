@@ -36,6 +36,11 @@
   sudo: yes
   sudo_user: root
 
+- name: hold chrome version
+  command: /usr/bin/apt-mark hold google-chrome-stable
+  sudo: yes
+  sudo_user: root
+
 - name: copy kiosk script
   copy:
     src: chromeKiosk.sh
