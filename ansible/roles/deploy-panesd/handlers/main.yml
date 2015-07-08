@@ -1,0 +1,4 @@
+- name: restart panesd
+  service: name=panesd state=restarted
+  sudo: yes
+

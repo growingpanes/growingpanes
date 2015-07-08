@@ -44,6 +44,9 @@
        key_file=/home/{{ panesd_user }}/.ssh/id_rsa_github
        accept_hostkey=yes
        depth=1
+  notify:
+    - restart panesd
+
 
 - name: go get dependencies
   command: bash -lc "go get"
