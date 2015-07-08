@@ -1,0 +1,58 @@
+---
+- name: Create .ssh dir
+  file: path=/home/{{ cardreadd_user }}/.ssh
+        state=directory
+
+- name: Copy deploy key file
+  copy: src="../../../id_rsa"
+        dest=/home/{{ cardreadd_user }}/.ssh/id_rsa_github
+        mode=0600
+        owner={{ cardreadd_user }}
+        group={{ cardreadd_user }}
+
+- name: deploy app
+  git: dest=/home/{{ cardreadd_user }}/src/{{ cardreadd_github_checkout }}
+       repo=ssh://git@{{ cardreadd_github_checkout }}.git
+       key_file=/home/{{ cardreadd_user }}/.ssh/id_rsa_github
+       accept_hostkey=yes
+       depth=1
+
+- name: get CmdpcProx binary
+  get_url: dest=/home/{{ cardreadd_user }}/src/{{ cardreadd_github_checkout }}
+           url=https://www.rfideas.com/files/downloads/software/CmdpcProx.tar.gz
+           sha256sum=f19c6f8c0dfbeb30b46d0cf776891d6069b1b84107a6e0eca52d094c1c4e9b34
+
+- name: unpack CmdpcProx binary
+  unarchive: dest=/home/{{ cardreadd_user }}/src/{{ cardreadd_github_checkout }}
+             src=/home/{{ cardreadd_user }}/src/{{ cardreadd_github_checkout }}/CmdpcProx.tar.gz
+             copy=no
+             creates=/home/{{ cardreadd_user }}/src/{{ cardreadd_github_checkout }}/CmdpcProx
+
+- name: install CmdpcProx dependencies
+  apt: "name={{ item }} update_cache=yes cache_valid_time=600"
+  with_items:
+    - lib32stdc++6
+  sudo: yes
+  sudo_user: root
+
+- name: Install cardreadd init script
+  template: src=etc/init.d/cardreadd dest=/etc/init.d/cardreadd owner=root group=root mode=0755
+  sudo: true
+  sudo_user: root
+
+- name: Enable cardreadd service
+  service: name=cardreadd enabled=yes
+  sudo: true
+  sudo_user: root
+
+- include: monit.yml
+  when: monit_protection is defined and monit_protection == true
+
+- name: copy udev rule
+  copy:
+    src: pcprox-card-reader.rules
+    dest: /etc/udev/rules.d/pcprox-card-reader.rules
+    mode: 0644
+  sudo: yes
+  sudo_user: root
+

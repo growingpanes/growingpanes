@@ -1,0 +1,5 @@
+check process cardreadd with pidfile /var/run/cardreadd.pid
+    group cardreadd
+    start program = "/etc/init.d/cardreadd start"
+    stop program = "/etc/init.d/cardreadd stop"
+    if 5 restarts within 5 cycles then timeout

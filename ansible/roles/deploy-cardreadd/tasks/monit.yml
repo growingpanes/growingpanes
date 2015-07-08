@@ -1,0 +1,8 @@
+- name: (Monit) Copy the cardreadd monit service file
+  template:
+    src: etc_monit_conf.d_cardreadd.j2
+    dest: /etc/monit/conf.d/cardreadd
+  notify:
+    - restart monit
+  sudo: yes
+  sudo_user: root

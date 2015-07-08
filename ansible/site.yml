@@ -11,18 +11,29 @@
     panesfe_user: panesfe
     panesd_user: panesd
     panesd_github_checkout: github.com/aocole/panesd
+    cardreadd_user: panesd
+    cardreadd_github_checkout: github.com/aocole/cardreadd
     rbenv:
       env: user
       version: v0.4.0
       ruby_version: 2.1.5
     rbenv_users:
-      - { name: "{{ panesfe_user }}", home: "/home/{{ panesfe_user }}/", comment: "Deploy user" }
+      - {
+          name: "{{ panesfe_user }}",
+          home: "/home/{{ panesfe_user }}/",
+          comment: "Deploy user"
+        }
+      - {
+          name: "{{ cardreadd_user }}",
+          home: "/home/{{ cardreadd_user }}/",
+          comment: "Cardreadd user"
+        }
     rails_apps:
       - name: panesfe
         ruby_version: 2.1.5
         root: "{{ panesfe_checkout_dir }}"
     nginx_install_method: package
-    rbenv_root: "{{ rbenv_users[0].home }}/.rbenv"
+    # rbenv_root: "{{ rbenv_users[0].home }}/.rbenv"
     rbenv_exe: "{{ rbenv_root }}/bin/rbenv"
     # List of databases to be created (optional)
     postgresql_databases:
@@ -50,3 +61,4 @@
     - { role: videowall-config,      sudo: yes, sudo_user: root, tags: ['panesd', 'panesfe', 'deploy'] }
     - { role: deploy-app,            become_user: "{{ panesfe_user }}",   tags: ['panesfe', 'deploy'] }
     - { role: deploy-panesd,         sudo: yes, sudo_user: "{{ panesd_user }}",    tags: ['panesd', 'deploy'] }
+    - { role: deploy-cardreadd,      sudo: yes, sudo_user: "{{ panesd_user }}",    tags: ['cardreadd', 'deploy'] }
