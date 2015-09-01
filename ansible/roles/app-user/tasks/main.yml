@@ -4,6 +4,7 @@
   user: name={{panesfe_user}}
   args:
     shell: /bin/bash
+    groups: dialout # necessary so panesfe user can access USB CEC devices
 - name: create videowall user
   user: name={{videowall_user}}
   args:
