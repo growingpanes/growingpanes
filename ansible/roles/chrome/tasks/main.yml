@@ -116,16 +116,16 @@
 # - name: download nvidia driver
 #   get_url:
 #     dest: /tmp
-#     url: http://us.download.nvidia.com/XFree86/Linux-x86_64/340.65/NVIDIA-Linux-x86_64-340.65.run
-#     sha256sum: cd3948db5c1e2468c50140efb4bb50f1a4c84c923db8ec756bd56ff35df9ff04
+#     url: http://us.download.nvidia.com/XFree86/Linux-x86_64/352.41/NVIDIA-Linux-x86_64-352.41.run
+#     sha256sum: 0eb60d0543a0e7c5c3cfec13702005ffec6e2b8c7f22c631f324736ba2a1a832
 #     mode: 0755
 
 # - name: install nvidia driver
-#   command: /tmp/NVIDIA-Linux-x86_64-340.65.run --accept-license --no-questions --ui=none
+#   command: /tmp/NVIDIA-Linux-x86_64-352.41.run --accept-license --no-questions --ui=none
 #   sudo: yes
 #   sudo_user: root
 #   args: 
-#     creates: /usr/lib/libnvidia-glcore.so.340.65
+#     creates: /usr/lib/libnvidia-glcore.so.352.41
 
 - name: set up nvidia driver
   command: /usr/bin/nvidia-xconfig
