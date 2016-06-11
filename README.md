@@ -5,4 +5,4 @@ Growing Panes is a video wall system. [`panesd`](https://github.com/growingpanes
 
 Additional documentation is in the [wiki](https://github.com/growingpanes/growingpanes/wiki).
 
-Growing Panes system, architecture, documentation, and all software is © 2014, 2015 Andrew Cole/Oui Street LLC. All Rights Reserved. Contact oui@oui.st for licensing.
+Growing Panes system, architecture, documentation, and all software is © 2014, 2015, 2016 Andrew Cole/Oui Street LLC. All Rights Reserved. Contact oui@oui.st for licensing.
