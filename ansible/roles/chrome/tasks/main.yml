@@ -10,12 +10,12 @@
     - update grub
 
 - name: add chrome repo key
-  apt_key: url=https://dl-ssl.google.com/linux/linux_signing_key.pub state=present
+  apt_key: url=https://dl.google.com/linux/linux_signing_key.pub state=present
 
 - name: add apt repos
   apt_repository: "repo='{{item}}' update_cache=yes"
   with_items:
-    - deb http://dl.google.com/linux/chrome/deb/ stable main
+    - deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main
     - deb http://us.archive.ubuntu.com/ubuntu/ trusty main restricted
     - deb http://us.archive.ubuntu.com/ubuntu/ trusty-updates main restricted
     - deb http://us.archive.ubuntu.com/ubuntu/ trusty-backports main restricted universe multiverse

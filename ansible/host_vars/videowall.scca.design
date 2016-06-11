@@ -5,3 +5,7 @@ panesfe_upload_drive_mount_point: /mnt/upload
 panesfe_upload_root_dir: "{{ panesfe_upload_drive_mount_point }}/"
 panesfe_upload_url_prefix: uploads
 
+static_ip_address: 192.168.1.200
+static_ip_netmask: 255.255.255.0
+static_ip_gateway: 192.168.1.1
+static_ip_interface_name: eth0
