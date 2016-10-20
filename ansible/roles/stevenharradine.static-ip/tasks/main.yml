@@ -1,0 +1,11 @@
+---
+- name: create static ip
+  template:
+    src: etc/network/interfaces
+    dest: /etc/network/interfaces
+    owner: root
+    group: root
+    mode: 0644
+  notify: Reboot network
+  tags:
+    - network
